@@ -87,7 +87,7 @@ export default function RoulettePage() {
   return (
     <div>
       <SectionTitle kicker="free spin every 2 minutes · zero real money" title="ROULETTE" />
-      <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="card-hi flex flex-col items-center p-4 md:p-6">
           <div className="relative w-full max-w-[420px]">
             {/* pointer */}

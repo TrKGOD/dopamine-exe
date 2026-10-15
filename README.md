@@ -89,6 +89,35 @@ curl -X POST -H "Authorization: Bearer $ADMIN_TOKEN" -H "Content-Type: applicati
 - Pets never die and never reset. Hunger and mood have floors, and they only make the pet's lines sadder.
 - Chaos events roll every 90 s (35% chance) while the tab is visible. You can turn them off in Settings, and visual effects can be hidden per event.
 
+## DOOMCLICKER (idle reactor)
+
+An idle clicker at `/doomclicker`. It has its own **reactor braincells** balance, kept separate from the main 🧠 wallet so idle-game numbers can't inflate the shop economy. Mission rewards pay out in main-game currency.
+
+- **Where the code lives:**
+  - Config and formulas: `src/lib/game/clickerConfig.ts`.
+  - All balance changes: `src/lib/game/clicker.ts`, run on the server through `/api/action`.
+- **Clicks:** the browser sends clicks in batches about once a second. The server accepts at most 20 per second (burst of 40) across all tabs.
+- **Passive production:**
+  - Gaps up to 90 s are paid immediately.
+  - Longer gaps become a single offline summary you claim, capped at 8 h.
+  - The server advances `lastTickAt` on every tick, so the same interval is never paid twice.
+- **Purchases:** price is `base × scale^owned` per unit, and bulk buys use the geometric sum. Pending clicks are applied first, in the same atomic step.
+- **Prestige:** unlocks at 1M braincells earned in the current run and awards `⌊3·√(run ÷ 1M)⌋` doom shards (+10% each).
+  - Resets the balance, upgrades and run earnings.
+  - Keeps the shards, lifetime stats, missions and achievements.
+- **Pet integration:**
+  - Each personality and evolution stage gives its own bonus.
+  - Feeding the pet starts a 2‑minute Sugar Rush (+25%).
+  - Bonuses from different sources multiply.
+  - Cosmetics don't affect stats. Pet level unlocks reactor skins.
+- **Migration:** saves from before DOOMCLICKER get a default `clicker` field the next time they load (`normalizePlayer`). Nothing needs to be run by hand.
+
+## Feed likes
+
+The heart belongs to a single **viewing instance** of a post. Every time a post scrolls back into view, its heart starts empty (`src/lib/content/viewInstances.ts`, `useInstanceLikes`).
+
+The persisted like on the server (`feed.liked`) still feeds the aggregate count and the first-like XP. It is updated with an idempotent `likePost { liked: true|false }`, so liking a post again in a new viewing instance never undoes the stored like. Rapid taps are merged into at most one request in flight per post.
+
 ## Accessibility & performance
 
 - **Motion and sound:**

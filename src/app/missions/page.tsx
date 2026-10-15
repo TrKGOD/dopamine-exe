@@ -6,6 +6,7 @@ import { useGame, useNow } from "@/client/game";
 import { Bar, RarityTag, SectionTitle } from "@/components/ui";
 import { CATEGORY_META } from "@/lib/content/posts";
 import { FEED_RULES, PROGRESSION_RULES, SEASON, type QuestDef } from "@/lib/game/config";
+import { ClickerMissions } from "@/components/clicker/ClickerMissions";
 import { rewardText } from "@/lib/game/format";
 import { questView } from "@/lib/game/selectors";
 import { formatDuration, nextDailyReset, nextWeeklyReset } from "@/lib/game/time";
@@ -103,6 +104,13 @@ export default function MissionsPage() {
             );
           })}
         </ol>
+      </section>
+
+      <section className="mt-6" aria-labelledby="doom-h">
+        <h2 id="doom-h" className="h-display mb-3 text-xl text-neon">
+          ☢️ DOOMCLICKER missions <span className="text-sm text-muted">(one-time)</span>
+        </h2>
+        <ClickerMissions />
       </section>
 
       <section className="card mt-6 p-4" aria-labelledby="mastery-h">

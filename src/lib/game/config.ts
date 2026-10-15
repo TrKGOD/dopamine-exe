@@ -2,6 +2,7 @@
  * Centralised game rules. Every reward, probability, threshold and cooldown
  * lives here so balancing never requires touching engine or UI code.
  */
+import { generatorCount } from "./clickerConfig";
 import { CATEGORIES, type Personality, type PublicPlayer as PlayerState, type Rarity, type Reward } from "./types";
 
 // ── Rarity presentation ───────────────────────────────────────────────────
@@ -367,6 +368,14 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   { id: "a_combo", name: "Certified Mutant", description: "Activate a mutation combo", emoji: "🧬", rarity: "epic", reward: { items: [{ id: "badge_mutant", qty: 1 }] }, progress: (s) => [s.pet.combosSeen.length, 1] },
   { id: "a_dnc", name: "You Had One Job", description: "Click the DO NOT CLICK button", emoji: "🔴", rarity: "uncommon", reward: { items: [{ id: "title_button", qty: 1 }] }, progress: (s) => [s.stats.dnc, 1] },
   { id: "a_chaos_5", name: "Chaos Survivor", description: "Experience 5 chaos events", emoji: "🌪️", rarity: "rare", reward: { items: [{ id: "title_chaos", qty: 1 }] }, progress: (s) => [s.stats.events, 5] },
+  // ── DOOMCLICKER ──
+  { id: "c_first_click", name: "First Click", description: "Click the DOOMCLICKER core", emoji: "👆", rarity: "common", reward: { xp: 10 }, progress: (s) => [s.clicker.totalClicks, 1] },
+  { id: "c_first_gen", name: "First Generator", description: "Own a DOOMCLICKER generator", emoji: "⛏️", rarity: "common", reward: { coins: 25 }, progress: (s) => [generatorCount(s.clicker), 1] },
+  { id: "c_thousand", name: "One Thousand Braincells", description: "Earn 1,000 reactor braincells (all-time)", emoji: "🧠", rarity: "uncommon", reward: { xp: 25, tokens: 2 }, progress: (s) => [Math.floor(s.clicker.lifetimeAll), 1000] },
+  { id: "c_masher", name: "Professional Button Masher", description: "Click the core 1,000 times", emoji: "🔨", rarity: "rare", reward: { tokens: 5, items: [{ id: "food_drink", qty: 1 }] }, progress: (s) => [s.clicker.totalClicks, 1000] },
+  { id: "c_afk", name: "AFK Millionaire", description: "Claim 1,000,000 braincells of offline earnings (all-time)", emoji: "😴", rarity: "epic", reward: { tokens: 12, items: [{ id: "cap_glitch", qty: 1 }] }, progress: (s) => [Math.floor(s.clicker.offlineEarned), 1_000_000] },
+  { id: "c_rat", name: "The Rat Economy", description: "Own 5 Quantum Rats at once", emoji: "🐀", rarity: "epic", reward: { tokens: 10 }, progress: (s) => [s.clicker.owned.quantum_rat ?? 0, 5] },
+  { id: "c_prestige", name: "Prestige Enjoyer", description: "Prestige the DOOMCLICKER reactor", emoji: "🔁", rarity: "legendary", reward: { tokens: 15, items: [{ id: "cap_mythic", qty: 1 }] }, progress: (s) => [s.clicker.prestiges, 1] },
   { id: "a_level_5", name: "Brain Partially Rotted", description: "Reach player level 5", emoji: "🧠", rarity: "uncommon", reward: { items: [{ id: "cap_basic", qty: 1 }] }, progress: (s) => [s.level, 5] },
 ];
 
@@ -381,5 +390,5 @@ export const STARTING_ITEMS: { id: string; qty: number }[] = [
 ];
 
 // ── Anti-abuse ───────────────────────────────────────────────────────────
-export const RATE_LIMIT = { windowMs: 10_000, maxActions: 40 };
+export const RATE_LIMIT = { windowMs: 10_000, maxActions: 60 };
 export const NONCE_MEMORY = 200;

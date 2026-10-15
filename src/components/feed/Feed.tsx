@@ -14,8 +14,11 @@ import { EmptyState } from "../ui";
 import { CommentsModal, readLocalComments } from "./CommentsModal";
 import { FeedPost } from "./FeedPost";
 import { SubmitModal } from "./SubmitModal";
+import { useInstanceLikes } from "./useInstanceLikes";
 
 type Filter = Category | "all" | "saved";
+
+const isPostApproved = (p: Post) => !p.submission || p.submission.status === "approved";
 
 export function Feed() {
   const { state, community, act } = useGame();
@@ -78,6 +81,7 @@ export function Feed() {
 
   // Dwell-based view reward (server validates & throttles)
   const post = posts[active];
+  const likes = useInstanceLikes(post?.id);
   const viewed = !!post && !!state?.feed.viewed.includes(post.id);
   useEffect(() => {
     if (!post || viewed || (post.submission && post.submission.status !== "approved")) return;
@@ -123,12 +127,12 @@ export function Feed() {
         scrollTo(activeRef.current - 1);
       } else if (e.key === "l") {
         const p = posts[activeRef.current];
-        if (p) void act({ type: "likePost", postId: p.id });
+        if (p && isPostApproved(p)) likes.toggle(p.id);
       } else if (e.key === "m") setMuted((m) => !m);
     };
     window.addEventListener("keydown", k);
     return () => window.removeEventListener("keydown", k);
-  }, [scrollTo, commentsFor, submitOpen, posts, act]);
+  }, [scrollTo, commentsFor, submitOpen, posts, likes]);
 
   const share = async (p: Post) => {
     const url = `${window.location.origin}/?post=${p.id}`;
@@ -146,7 +150,6 @@ export function Feed() {
   };
 
   if (!state) return null;
-  const isPostApproved = (p: Post) => !p.submission || p.submission.status === "approved";
 
   return (
     <div className="relative h-full w-full">
@@ -207,15 +210,14 @@ export function Feed() {
               near={Math.abs(i - active) <= 1}
               reduced={reducedMotion}
               muted={muted}
-              flags={{ liked: state.feed.liked.includes(p.id), bookmarked: state.feed.bookmarked.includes(p.id), viewed: state.feed.viewed.includes(p.id) }}
+              flags={{ liked: likes.isLiked(p.id), persistedLiked: state.feed.liked.includes(p.id), bookmarked: state.feed.bookmarked.includes(p.id), viewed: state.feed.viewed.includes(p.id) }}
               commentCount={p.comments.length + (localComments[p.id]?.length ?? 0)}
               onLike={(el) => {
                 if (!isPostApproved(p)) return fx.toast("You can react once it's approved.", "info");
-                if (!state.feed.liked.includes(p.id)) {
+                if (likes.toggle(p.id)) {
                   fx.burstAt(el, ["#ff2e97", "#ffffff"], 18);
                   fx.sfx("pat");
                 }
-                void act({ type: "likePost", postId: p.id });
               }}
               onBookmark={() => {
                 if (!isPostApproved(p)) return;

@@ -6,7 +6,10 @@ import { CATEGORY_META, type Post } from "@/lib/content/posts";
 import { Scene } from "./Scenes";
 
 export interface PostFlags {
+  /** heart of the current viewing instance (resets when the post re-enters the feed) */
   liked: boolean;
+  /** persisted like on the server, part of the aggregate count */
+  persistedLiked: boolean;
   bookmarked: boolean;
   viewed: boolean;
 }
@@ -76,7 +79,7 @@ export const FeedPost = memo(function FeedPost({ post, index, active, near, flag
   const cat = CATEGORY_META[post.category];
   const likeRef = useRef<HTMLButtonElement>(null);
   const [heart, setHeart] = useState(0);
-  const likes = post.baseLikes + (flags.liked ? 1 : 0);
+  const likes = post.baseLikes + (flags.persistedLiked ? 1 : 0);
   const pending = post.submission && post.submission.status !== "approved";
 
   return (

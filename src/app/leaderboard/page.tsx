@@ -78,8 +78,8 @@ export default function LeaderboardPage() {
         </section>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-        <section aria-label="Rankings">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <section className="min-w-0" aria-label="Rankings">
           {error && !board ? (
             <EmptyState emoji="📡" title="Leaderboard unreachable">
               <button className="btn-neon mt-2" onClick={load}>

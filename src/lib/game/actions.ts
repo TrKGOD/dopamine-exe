@@ -7,7 +7,7 @@ const name = z.string().min(1).max(40);
 export const ActionSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("onboard"), name, personality: z.enum(PERSONALITIES) }),
   z.object({ type: z.literal("viewPost"), postId: id }),
-  z.object({ type: z.literal("likePost"), postId: id }),
+  z.object({ type: z.literal("likePost"), postId: id, liked: z.boolean() }),
   z.object({ type: z.literal("bookmarkPost"), postId: id }),
   z.object({ type: z.literal("share"), target: id }),
   z.object({ type: z.literal("feedPet"), itemId: id }),
@@ -29,6 +29,12 @@ export const ActionSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("eventHit"), target: z.number().int().min(0).max(20) }),
   z.object({ type: z.literal("eventClaim") }),
   z.object({ type: z.literal("setDisplayName"), name }),
+  // DOOMCLICKER — clicks are batched; the server caps how many it accepts
+  z.object({ type: z.literal("clickerSync"), clicks: z.number().int().min(0).max(200) }),
+  z.object({ type: z.literal("clickerBuy"), upgradeId: id, qty: z.number().int().min(1).max(100), clicks: z.number().int().min(0).max(200) }),
+  z.object({ type: z.literal("clickerClaimOffline") }),
+  z.object({ type: z.literal("clickerPrestige"), confirm: z.literal(true) }),
+  z.object({ type: z.literal("clickerClaimMission"), missionId: id }),
 ]);
 
 export type GameAction = z.infer<typeof ActionSchema>;

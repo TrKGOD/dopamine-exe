@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useFx } from "@/client/fx";
 import { useGame, useNow } from "@/client/game";
 import { useSettings } from "@/client/settings";
+import { formatBig, productionPerSecond } from "@/lib/game/clicker";
 import { questView } from "@/lib/game/selectors";
 import { ChaosLayer } from "./ChaosLayer";
 import { EffectsLayer } from "./EffectsLayer";
@@ -19,6 +20,7 @@ export const NAV = [
   { href: "/home", label: "Home", icon: "🏠" },
   { href: "/", label: "Brainrot Feed", icon: "📱" },
   { href: "/roulette", label: "Roulette", icon: "🎡" },
+  { href: "/doomclicker", label: "DOOMCLICKER", icon: "☢️" },
   { href: "/pet", label: "Pet Lab", icon: "🧪" },
   { href: "/inventory", label: "Inventory", icon: "🎒" },
   { href: "/missions", label: "Missions", icon: "📋" },
@@ -31,6 +33,7 @@ const MOBILE_NAV = [
   { href: "/", label: "Feed", icon: "📱" },
   { href: "/pet", label: "Pet", icon: "🧪" },
   { href: "/roulette", label: "Spin", icon: "🎡" },
+  { href: "/doomclicker", label: "Doom", icon: "☢️" },
   { href: "/missions", label: "Quests", icon: "📋" },
 ];
 
@@ -89,6 +92,7 @@ function useNavBadges() {
     const b: Record<string, string> = {};
     if (now >= state.roulette.nextSpinAt) b["/roulette"] = "READY";
     if (claimable) b["/missions"] = String(claimable);
+    if (state.clicker.pendingOffline) b["/doomclicker"] = "AFK";
     return b;
   }, [state, now]);
 }
@@ -164,6 +168,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             );
           })}
         </nav>
+        <ClickerChip />
         <DoNotClick />
         <div className="mt-3 flex items-center justify-between">
           <Wallet compact />
@@ -208,7 +213,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       {/* ── Bottom nav (mobile) ─────────────────────── */}
       <nav className="safe-bottom fixed inset-x-0 bottom-0 z-50 border-t border-line bg-void/95 backdrop-blur md:hidden" aria-label="Mobile navigation">
-        <div className="grid grid-cols-5">
+        <div className="grid grid-cols-6">
           {MOBILE_NAV.map((n) => {
             const active = pathname === n.href;
             return (
@@ -290,6 +295,21 @@ function MiniPet() {
   const { state } = useGame();
   if (!state) return null;
   return <PetAvatar {...state.pet} size={52} animate={false} />;
+}
+
+/** Compact live DOOMCLICKER production indicator. */
+function ClickerChip() {
+  const { state } = useGame();
+  const now = useNow();
+  if (!state) return null;
+  const pps = productionPerSecond(state, now);
+  if (pps <= 0 && !state.clicker.pendingOffline) return null;
+  return (
+    <Link href="/doomclicker" className="mb-2 flex items-center justify-between rounded-xl border border-neon/40 bg-neon/5 px-3 py-1.5 font-mono text-xs text-neon hover:bg-neon/10" aria-label={`DOOMCLICKER producing ${formatBig(pps)} per second`}>
+      <span>☢ reactor</span>
+      <span>{state.clicker.pendingOffline ? "AFK loot!" : `${formatBig(pps)}/s`}</span>
+    </Link>
+  );
 }
 
 export function DoNotClick() {

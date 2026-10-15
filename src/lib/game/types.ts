@@ -120,6 +120,31 @@ export interface EventLogEntry {
   outcome: string;
 }
 
+/** DOOMCLICKER idle game. Its own "reactor braincells" balance, separate from the main wallet. */
+export interface ClickerState {
+  version: 1;
+  braincells: number;
+  /** earned since the last prestige */
+  lifetimeRun: number;
+  /** earned across all runs (never reset) */
+  lifetimeAll: number;
+  totalClicks: number;
+  owned: Record<string, number>;
+  /** server time production was last applied up to */
+  lastTickAt: number;
+  /** anti-autoclicker token bucket */
+  clickBudget: number;
+  budgetAt: number;
+  /** "Sugar Rush" buff from feeding the pet */
+  buffUntil: number;
+  shards: number;
+  prestiges: number;
+  pendingOffline: { seconds: number; amount: number; generators: number; at: number } | null;
+  offlineEarned: number;
+  offlineClaims: number;
+  missionsClaimed: string[];
+}
+
 export interface PlayerState {
   version: 1;
   id: string;
@@ -174,6 +199,7 @@ export interface PlayerState {
   weekly: { key: string; xp: number };
   events: { active: ActiveEvent | null; nextRollAt: number; nextDncAt: number; log: EventLogEntry[] };
   recent: RecentUnlock[];
+  clicker: ClickerState;
   processedActions: string[];
 }
 

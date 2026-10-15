@@ -5,7 +5,7 @@
  * The context is only created after a user gesture triggers a sound.
  */
 
-export type Sfx = "click" | "coin" | "xp" | "level" | "evolve" | "tick" | "reveal" | "rare" | "mythic" | "error" | "chaos" | "feed" | "pat" | "open" | "achievement";
+export type Sfx = "zap" | "click" | "coin" | "xp" | "level" | "evolve" | "tick" | "reveal" | "rare" | "mythic" | "error" | "chaos" | "feed" | "pat" | "open" | "achievement";
 
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
@@ -72,6 +72,9 @@ function noise(start: number, dur: number, gain = 0.1, hp = 4000) {
 export function play(s: Sfx) {
   if (!enabled) return;
   switch (s) {
+    case "zap":
+      tone(880 + Math.random() * 220, 0, 0.04, "square", 0.04, 1600);
+      break;
     case "click":
       tone(660, 0, 0.05, "square", 0.06);
       break;

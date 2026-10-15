@@ -30,6 +30,8 @@ import {
   type ChaosId,
   type QuestMetric,
 } from "./config";
+import { applyClicks, applySugarRush, buyUpgrade, claimClickerMission, claimOffline, clickerTick, formatBig, prestige } from "./clicker";
+import { newClicker } from "./clickerConfig";
 import { ITEMS, findCombo, getItem, poolItems } from "./items";
 import { weightedPick, type Rng } from "./rng";
 import { activeQuests, hasEffect, questMetricValue } from "./selectors";
@@ -89,6 +91,7 @@ export function createPlayer(id: string, publicId: string, now: number): PlayerS
     weekly: { key: weekKey(now), xp: 0 },
     events: { active: null, nextRollAt: now + CHAOS_ROLL_INTERVAL_MS, nextDncAt: now, log: [] },
     recent: [],
+    clicker: newClicker(now),
     processedActions: [],
   };
   for (const it of STARTING_ITEMS) addItem(s, it.id, it.qty, "Starter pack", now, []);
@@ -121,6 +124,7 @@ export function tick(s: PlayerState, now: number) {
   s.quests.claimed = s.quests.claimed.filter((c) => c.startsWith(dk + ":") || c.startsWith(wk + ":"));
   s.activeEffects = s.activeEffects.filter((e) => e.until > now);
   if (s.events.active && s.events.active.endsAt <= now) s.events.active = null;
+  clickerTick(s, now);
 }
 
 // ── Reward plumbing ───────────────────────────────────────────────────────
@@ -376,13 +380,15 @@ export function applyAction(s: PlayerState, a: GameAction, ctx: EngineCtx): Acti
     }
 
     case "likePost": {
+      // Idempotent "set" (not a toggle): the client's heart is per viewing instance,
+      // so a re-like of an already-liked post must never flip the persisted like off.
       if (!ctx.postCategory(a.postId)) return fail("unknown_post");
       const i = s.feed.liked.indexOf(a.postId);
-      if (i >= 0) {
-        s.feed.liked.splice(i, 1);
+      if (!a.liked) {
+        if (i >= 0) s.feed.liked.splice(i, 1);
         return { ok: true, effects: fx };
       }
-      s.feed.liked.push(a.postId);
+      if (i < 0) s.feed.liked.push(a.postId);
       if (!s.feed.likedEver.includes(a.postId)) {
         s.feed.likedEver.push(a.postId);
         s.stats.likes++;
@@ -425,6 +431,7 @@ export function applyAction(s: PlayerState, a: GameAction, ctx: EngineCtx): Acti
       s.stats.feeds++;
       bump(s, "feeds");
       addPetXp(s, Math.round(def.food.petXp * (wellFed ? 1 + PET_RULES.wellFedBonus : 1)), ctx, fx);
+      applySugarRush(s, now);
       petSay(s, "fed", ctx, fx);
       return { ok: true, effects: fx };
     }
@@ -636,6 +643,40 @@ export function applyAction(s: PlayerState, a: GameAction, ctx: EngineCtx): Acti
       ev.claimed = true;
       grant(s, def.claim, def.name, ctx, fx);
       setLogOutcome(s, "Completed");
+      return { ok: true, effects: fx };
+    }
+
+    case "clickerSync": {
+      applyClicks(s, a.clicks, now);
+      return { ok: true, effects: fx };
+    }
+
+    case "clickerBuy": {
+      // pending clicks land first so the purchase sees the up-to-date balance (one atomic step)
+      applyClicks(s, a.clicks, now);
+      const r = buyUpgrade(s, a.upgradeId, a.qty);
+      return r.ok ? { ok: true, effects: fx } : fail(r.error);
+    }
+
+    case "clickerClaimOffline": {
+      const amount = s.clicker.pendingOffline?.amount ?? 0;
+      const r = claimOffline(s);
+      if (!r.ok) return fail(r.error);
+      fx.push({ type: "toast", text: `Offline earnings claimed: +${formatBig(amount)} reactor braincells`, tone: "good" });
+      return { ok: true, effects: fx };
+    }
+
+    case "clickerPrestige": {
+      const r = prestige(s);
+      if (!r.ok) return fail(r.error);
+      fx.push({ type: "toast", text: `PRESTIGE! +${r.shards} doom shard${r.shards === 1 ? "" : "s"}. The reactor is reborn.`, tone: "weird" });
+      return { ok: true, effects: fx };
+    }
+
+    case "clickerClaimMission": {
+      const r = claimClickerMission(s, a.missionId, (reward, source) => grant(s, reward, source, ctx, fx));
+      if (!r.ok) return fail(r.error);
+      fx.push({ type: "questClaimed", id: a.missionId });
       return { ok: true, effects: fx };
     }
 

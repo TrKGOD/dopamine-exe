@@ -103,12 +103,21 @@ describe("feed progression", () => {
 
   it("rewards a like only the first time", () => {
     const s = fresh();
-    act(s, { type: "likePost", postId: "p03" }, T0);
+    act(s, { type: "likePost", postId: "p03", liked: true }, T0);
     const xp = s.xp;
-    act(s, { type: "likePost", postId: "p03" }, T0 + 1); // unlike
-    act(s, { type: "likePost", postId: "p03" }, T0 + 2); // like again
+    act(s, { type: "likePost", postId: "p03", liked: false }, T0 + 1); // unlike
+    act(s, { type: "likePost", postId: "p03", liked: true }, T0 + 2); // like again
     expect(s.xp).toBe(xp);
     expect(s.feed.liked).toContain("p03");
+  });
+
+  it("treats likes as an idempotent set so re-liking never flips the stored like", () => {
+    const s = fresh();
+    act(s, { type: "likePost", postId: "p03", liked: true }, T0);
+    // a new viewing instance shows an empty heart; liking again must keep the like
+    act(s, { type: "likePost", postId: "p03", liked: true }, T0 + 1);
+    expect(s.feed.liked.filter((id) => id === "p03")).toHaveLength(1);
+    expect(s.stats.likes).toBe(1);
   });
 
   it("discovers categories and grants mastery", () => {

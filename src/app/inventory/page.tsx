@@ -172,7 +172,7 @@ export default function InventoryPage() {
             {state.recent.length === 0 ? (
               <p className="text-sm text-muted">Nothing acquired yet.</p>
             ) : (
-              <ul className="grid gap-1.5 text-sm sm:grid-cols-2">
+              <ul className="grid grid-cols-1 gap-1.5 text-sm sm:grid-cols-2">
                 {state.recent.slice(0, 12).map((r, idx) => (
                   <li key={r.at + ":" + idx} className="flex items-center gap-2">
                     <span>{r.itemId ? ITEMS[r.itemId]?.emoji : "🏆"}</span>

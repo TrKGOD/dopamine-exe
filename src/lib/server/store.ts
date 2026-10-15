@@ -92,7 +92,7 @@ async function flush() {
 function normalizePlayer(p: PlayerState): PlayerState {
   const base = createPlayer(p.id, p.publicId, p.createdAt ?? Date.now());
   const merged = { ...base, ...p } as PlayerState;
-  for (const key of ["pet", "feed", "roulette", "quests", "stats", "season", "weekly", "events"] as const) {
+  for (const key of ["pet", "feed", "roulette", "quests", "stats", "season", "weekly", "events", "clicker"] as const) {
     (merged as unknown as Record<string, unknown>)[key] = { ...(base[key] as object), ...((p[key] as object) ?? {}) };
   }
   return merged;
