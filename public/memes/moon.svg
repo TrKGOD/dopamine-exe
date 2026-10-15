@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" font-family="'Courier New', monospace">
+  <rect width="600" height="800" fill="#02010a"/>
+  <g fill="#fff"><circle cx="60" cy="90" r="2"/><circle cx="520" cy="60" r="2"/><circle cx="440" cy="160" r="1.5"/><circle cx="120" cy="300" r="1.5"/><circle cx="540" cy="420" r="2"/><circle cx="80" cy="560" r="1.5"/></g>
+  <rect x="100" y="160" width="400" height="400" rx="24" fill="#111" stroke="#444" stroke-width="10"/>
+  <circle cx="300" cy="360" r="150" fill="#e8e6dc"/>
+  <circle cx="250" cy="320" r="28" fill="#cfccbe"/><circle cx="350" cy="410" r="20" fill="#cfccbe"/><circle cx="330" cy="290" r="12" fill="#cfccbe"/>
+  <rect x="100" y="520" width="400" height="40" fill="#1d1d1d"/>
+  <text x="120" y="547" font-size="20" fill="#39ff88">C:\SKY\screensaver.scr</text>
+  <text x="300" y="660" font-family="Impact, sans-serif" font-size="44" fill="#fff" text-anchor="middle">SOMEBODY</text>
+  <text x="300" y="715" font-family="Impact, sans-serif" font-size="44" fill="#fff" text-anchor="middle">MOVE THE MOUSE</text>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" font-family="Impact, 'Arial Black', sans-serif">
+  <rect width="600" height="800" fill="#0b0816"/>
+  <g stroke="#2a2540" stroke-width="4">
+    <line x1="0" y1="200" x2="600" y2="200"/><line x1="0" y1="400" x2="600" y2="400"/><line x1="0" y1="600" x2="600" y2="600"/><line x1="300" y1="0" x2="300" y2="800"/>
+  </g>
+  <g font-size="34" fill="#fff" text-anchor="middle">
+    <text x="150" y="110">reading a book</text>
+    <text x="150" y="310">watching a</text><text x="150" y="350">documentary</text>
+    <text x="150" y="510">10 sec clips</text><text x="150" y="550">at 2x speed</text>
+    <text x="150" y="700">staring at a</text><text x="150" y="740">loading spinner</text>
+  </g>
+  <circle cx="450" cy="100" r="30" fill="#ff8fb3"/>
+  <circle cx="450" cy="300" r="50" fill="#ff7aa8"/><circle cx="450" cy="300" r="70" fill="none" stroke="#ffd1e1" stroke-width="3"/>
+  <circle cx="450" cy="500" r="70" fill="#a855ff"/><circle cx="450" cy="500" r="90" fill="none" stroke="#2ef2ff" stroke-width="6"/>
+  <g>
+    <circle cx="450" cy="700" r="90" fill="#fff" opacity=".15"/>
+    <circle cx="450" cy="700" r="70" fill="#e8ff3a"/>
+    <g stroke="#fff" stroke-width="4">
+      <line x1="450" y1="610" x2="450" y2="580"/><line x1="360" y1="700" x2="330" y2="700"/><line x1="540" y1="700" x2="570" y2="700"/><line x1="390" y1="640" x2="370" y2="620"/><line x1="510" y1="640" x2="530" y2="620"/>
+    </g>
+    <text x="450" y="715" font-size="40" text-anchor="middle" fill="#000">∞</text>
+  </g>
+</svg>

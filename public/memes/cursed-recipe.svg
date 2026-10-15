@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" font-family="Georgia, serif">
+  <rect width="600" height="800" fill="#f5ecd7"/>
+  <rect x="30" y="30" width="540" height="740" fill="none" stroke="#8a5a2b" stroke-width="4" stroke-dasharray="12 6"/>
+  <text x="300" y="110" font-size="44" text-anchor="middle" fill="#5a2d0c" font-style="italic">Grandma's Soup</text>
+  <text x="300" y="150" font-size="18" text-anchor="middle" fill="#8a5a2b">(serves: unknown)</text>
+  <g font-size="26" fill="#3b1d06">
+    <text x="70" y="230">1. Boil water until it apologizes</text>
+    <text x="70" y="290">2. Add 3 cups of whispers</text>
+    <text x="70" y="350">3. Stir counter-clockwise</text>
+    <text x="100" y="385" font-size="20">(clockwise summons him)</text>
+    <text x="70" y="445">4. Scream</text>
+    <text x="70" y="505">5. Season to taste (it tastes you)</text>
+    <text x="70" y="565">6. Do not look into the pot</text>
+  </g>
+  <circle cx="440" cy="680" r="70" fill="#d9c7a0"/>
+  <ellipse cx="440" cy="670" rx="52" ry="18" fill="#c46a2a"/>
+  <circle cx="425" cy="668" r="7" fill="#fff"/><circle cx="455" cy="668" r="7" fill="#fff"/>
+  <circle cx="425" cy="669" r="3" fill="#000"/><circle cx="455" cy="669" r="3" fill="#000"/>
+  <text x="140" y="700" font-size="22" fill="#a00" transform="rotate(-8 140 700)">it's watching</text>
+</svg>

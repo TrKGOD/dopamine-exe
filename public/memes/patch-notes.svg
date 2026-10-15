@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" font-family="'Courier New', monospace">
+  <rect width="600" height="800" fill="#0d1117"/>
+  <text x="40" y="80" font-family="Impact, sans-serif" font-size="52" fill="#2ef2ff">PATCH 4.20.69</text>
+  <text x="40" y="120" font-size="20" fill="#8b949e">// the devs have not slept</text>
+  <g font-size="22" fill="#e6edf3">
+    <text x="40" y="190"><tspan fill="#39ff88">+</tspan> Moon is now 3% less round</text>
+    <text x="40" y="240"><tspan fill="#39ff88">+</tspan> Added fall damage to stairs</text>
+    <text x="40" y="290"><tspan fill="#ff2e97">-</tspan> Removed the concept of Tuesday</text>
+    <text x="40" y="340"><tspan fill="#ffb02e">~</tspan> Frogs no longer clip through</text>
+    <text x="70" y="370">reality (mostly)</text>
+    <text x="40" y="420"><tspan fill="#ffb02e">~</tspan> Buffed grass. Still untouched.</text>
+    <text x="40" y="470"><tspan fill="#ff2e97">-</tspan> Nerfed the vibes by 0.01%</text>
+    <text x="40" y="520"><tspan fill="#39ff88">+</tspan> Fixed bug where bug was fixed</text>
+  </g>
+  <rect x="40" y="580" width="520" height="140" rx="12" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+  <text x="60" y="625" font-size="20" fill="#8b949e">Known issues:</text>
+  <text x="60" y="665" font-size="22" fill="#e8ff3a">- everything</text>
+  <text x="60" y="700" font-size="22" fill="#e8ff3a">- see above</text>
+</svg>

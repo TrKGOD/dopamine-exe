@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" font-family="Impact, 'Arial Black', sans-serif">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a0033"/><stop offset="1" stop-color="#000"/></linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#g)"/>
+  <text x="300" y="330" font-size="220" text-anchor="middle" fill="#ff2e97" opacity=".6" transform="translate(-6 0)">404</text>
+  <text x="300" y="330" font-size="220" text-anchor="middle" fill="#2ef2ff" opacity=".6" transform="translate(6 0)">404</text>
+  <text x="300" y="330" font-size="220" text-anchor="middle" fill="#fff">404</text>
+  <text x="300" y="420" font-size="46" text-anchor="middle" fill="#e8ff3a">SLEEP SCHEDULE</text>
+  <text x="300" y="475" font-size="46" text-anchor="middle" fill="#e8ff3a">NOT FOUND</text>
+  <text x="300" y="560" font-family="'Courier New', monospace" font-size="22" text-anchor="middle" fill="#8f89a8">last seen: 2019</text>
+  <g transform="translate(300 670)">
+    <circle r="60" fill="#fff6b0"/><circle cx="24" cy="-14" r="56" fill="#1a0033"/>
+    <text x="-20" y="10" font-size="26" fill="#000">z</text>
+  </g>
+</svg>
