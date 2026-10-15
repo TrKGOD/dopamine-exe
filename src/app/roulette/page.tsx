@@ -1,5 +1,6 @@
 "use client";
 
+import { STATIC_MODE } from "@/client/backend";
 import { animate, motion, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { useMemo, useRef, useState } from "react";
 import { useFx } from "@/client/fx";
@@ -139,7 +140,7 @@ export default function RoulettePage() {
           {!ready && !spinning && (
             <div className="mt-4 w-full max-w-sm">
               <Bar value={ROULETTE_COOLDOWN_MS - Math.max(0, left)} max={ROULETTE_COOLDOWN_MS} color="#a855ff" label="Cooldown progress" />
-              <p className="mt-1 text-center text-xs text-muted">Cooldown is enforced by the server clock. Refreshing won&apos;t help (we checked).</p>
+              <p className="mt-1 text-center text-xs text-muted">{STATIC_MODE ? "Cooldown is saved with your progress. Refreshing won't help." : "Cooldown is enforced by the server clock. Refreshing won't help (we checked)."}</p>
             </div>
           )}
 

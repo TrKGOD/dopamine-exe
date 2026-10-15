@@ -2,7 +2,7 @@
 
 import { PERSONALITY_META, RARITY_META, stageForLevel } from "@/lib/game/config";
 import { ITEMS } from "@/lib/game/items";
-import type { PublicProfile } from "@/lib/server/profiles";
+import type { PublicProfile } from "@/lib/content/profiles";
 import { PetAvatar } from "./PetAvatar";
 import { RarityTag } from "./ui";
 

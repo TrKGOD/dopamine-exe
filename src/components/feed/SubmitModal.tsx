@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { STATIC_MODE } from "@/client/backend";
 import { useFx } from "@/client/fx";
 import { useGame } from "@/client/game";
 import { CATEGORY_META } from "@/lib/content/posts";
@@ -70,7 +71,15 @@ export function SubmitModal({ open, onClose }: { open: boolean; onClose: () => v
 
   return (
     <Modal open={open} onClose={onClose} title="Submit to the feed">
-      {status === "done" ? (
+      {STATIC_MODE ? (
+        <div className="space-y-3 text-center">
+          <div className="text-5xl">📡</div>
+          <p className="text-white">Uploads need the server version of DOPAMINE.EXE (moderation queue + file storage). This GitHub Pages build is a single-player static demo.</p>
+          <button className="btn-neon" onClick={onClose} data-autofocus>
+            Back to scrolling
+          </button>
+        </div>
+      ) : status === "done" ? (
         <div className="space-y-3 text-center">
           <div className="text-5xl">📨</div>
           <p className="text-white">Your creation is pending review. It shows at the top of your feed (only to you) until a moderator approves it.</p>

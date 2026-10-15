@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { forwardRef, memo, useEffect, useRef, useState } from "react";
+import { withBase } from "@/client/backend";
 import { CATEGORY_META, type Post } from "@/lib/content/posts";
 import { Scene } from "./Scenes";
 
@@ -97,7 +98,7 @@ export const FeedPost = memo(function FeedPost({ post, index, active, near, flag
           ) : post.kind === "video" && post.src ? (
             <VideoMedia src={post.src} active={active} muted={muted} />
           ) : post.kind === "image" && post.src ? (
-            <ImageMedia src={post.src} alt={post.caption} />
+            <ImageMedia src={withBase(post.src)} alt={post.caption} />
           ) : (
             <MediaFallback />
           )

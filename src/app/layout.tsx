@@ -10,7 +10,7 @@ const pixel = VT323({ weight: "400", subsets: ["latin"], variable: "--font-pixel
 export const metadata: Metadata = {
   title: "DOPAMINE.EXE — the internet brainrot simulator",
   description: "A chaotic arcade of vertical memes, a needy virtual pet, a 2-minute roulette and absolutely zero real money.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/favicon.svg` },
 };
 
 export const viewport: Viewport = {

@@ -1,5 +1,6 @@
 "use client";
 
+import { STATIC_MODE } from "@/client/backend";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useFx } from "@/client/fx";
@@ -85,7 +86,7 @@ export function Onboarding() {
           </button>
         </form>
         <p className="mt-4 text-xs text-muted">
-          All rewards are fictional and non-redeemable. No real money, ever. Progress is saved on this server and tied to an anonymous cookie in this browser.
+          All rewards are fictional and non-redeemable. No real money, ever. {STATIC_MODE ? "Progress is saved only in this browser (localStorage)." : "Progress is saved on this server and tied to an anonymous cookie in this browser."}
         </p>
       </motion.div>
     </div>

@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { useFx } from "@/client/fx";
 import { useGame } from "@/client/game";
+import { backend, STATIC_MODE } from "@/client/backend";
 import { useSettings, type Settings } from "@/client/settings";
 import { Modal, SectionTitle } from "@/components/ui";
 import { CHAOS_EVENTS, CHAOS_ROLL_CHANCE, CHAOS_ROLL_INTERVAL_MS, type ChaosId } from "@/lib/game/config";
@@ -105,7 +106,9 @@ export default function SettingsPage() {
         <section className="card p-4 lg:col-span-2" aria-label="Data and privacy">
           <h2 className="label mb-2">Data & privacy</h2>
           <p className="text-sm text-white/80">
-            Your progress is stored on this server under an anonymous, signed cookie — no email, no password, no tracking. Public leaderboards only show your display name, level and cosmetics. Comments you write are kept on this device.
+            {STATIC_MODE
+              ? "This is the static (GitHub Pages) version: your progress is saved only in this browser's localStorage. Clearing site data erases it. No account, no tracking, nothing leaves your device."
+              : "Your progress is stored on this server under an anonymous, signed cookie — no email, no password, no tracking. Public leaderboards only show your display name, level and cosmetics. Comments you write are kept on this device."}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <button
@@ -129,7 +132,7 @@ export default function SettingsPage() {
       </div>
 
       <Modal open={resetOpen} onClose={() => setResetOpen(false)} title="Reset everything?">
-        <p className="text-sm text-white/80">This deletes your pet, items, quests and stats on this server. It cannot be undone. Type <b className="text-hot">DELETE MY BRAINROT</b> to confirm.</p>
+        <p className="text-sm text-white/80">This deletes your pet, items, quests and stats {STATIC_MODE ? "in this browser" : "on this server"}. It cannot be undone. Type <b className="text-hot">DELETE MY BRAINROT</b> to confirm.</p>
         <input value={confirm} onChange={(e) => setConfirm(e.target.value)} className="mt-3 w-full rounded-xl border border-line bg-black/40 px-3 py-2 text-sm outline-none focus:border-hot" aria-label="Confirmation phrase" />
         <div className="mt-4 flex justify-end gap-2">
           <button className="btn-ghost" onClick={() => setResetOpen(false)}>
@@ -139,9 +142,8 @@ export default function SettingsPage() {
             className="btn-hot"
             disabled={confirm !== "DELETE MY BRAINROT"}
             onClick={async () => {
-              const res = await fetch("/api/reset", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ confirm }) });
-              const data = await res.json();
-              if (data.ok) {
+              const data = await backend.reset(confirm);
+              if (data.ok && data.state) {
                 setState(data.state);
                 setResetOpen(false);
                 setConfirm("");

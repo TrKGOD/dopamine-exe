@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { BASE_PATH } from "@/client/backend";
 import { useFx } from "@/client/fx";
 import { useGame } from "@/client/game";
 import { useSettings } from "@/client/settings";
@@ -135,7 +136,7 @@ export function Feed() {
   }, [scrollTo, commentsFor, submitOpen, posts, likes]);
 
   const share = async (p: Post) => {
-    const url = `${window.location.origin}/?post=${p.id}`;
+    const url = `${window.location.origin}${BASE_PATH}/?post=${p.id}`;
     const text = `${p.caption} — via DOPAMINE.EXE`;
     try {
       if (navigator.share) await navigator.share({ title: "DOPAMINE.EXE", text, url });

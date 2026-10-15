@@ -99,6 +99,16 @@ export function createPlayer(id: string, publicId: string, now: number): PlayerS
   return s;
 }
 
+/** Fill in any fields missing from older saves so new features never crash old players. */
+export function normalizePlayer(p: PlayerState): PlayerState {
+  const base = createPlayer(p.id, p.publicId, p.createdAt ?? Date.now());
+  const merged = { ...base, ...p } as PlayerState;
+  for (const key of ["pet", "feed", "roulette", "quests", "stats", "season", "weekly", "events", "clicker"] as const) {
+    (merged as unknown as Record<string, unknown>)[key] = { ...(base[key] as object), ...((p[key] as object) ?? {}) };
+  }
+  return merged;
+}
+
 // ── Passive time-based updates (never punishing) ──────────────────────────
 export function tick(s: PlayerState, now: number) {
   const hours = Math.max(0, now - s.pet.lastTickAt) / 3_600_000;

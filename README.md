@@ -25,6 +25,27 @@ npm test           # engine unit tests (vitest)
 npm run typecheck  # TypeScript
 ```
 
+## GitHub Pages (static demo)
+
+Live demo: **https://trkgod.github.io/dopamine-exe/**
+
+Every push to `main` triggers `.github/workflows/pages.yml`, which runs the tests and `npm run build:pages` and publishes `out/`. To build the same thing locally:
+
+```bash
+npm run build:pages   # writes ./out with basePath /dopamine-exe
+```
+
+GitHub Pages only serves static files, so this build runs the **same game engine inside the browser** and saves progress to `localStorage` (`src/client/backend.ts`). Compared with the server version:
+
+| | Server (`npm run build && npm start`) | GitHub Pages |
+| --- | --- | --- |
+| Progress | Server JSON store, anonymous cookie | Saved only in this browser |
+| Anti‑cheat (cooldowns, rewards, click caps) | Enforced by the server | Same rules, but they run in the browser and can be tampered with |
+| Leaderboard | Real players + DEMO | Only you + DEMO players |
+| Uploads / moderation | Yes | Disabled |
+
+For the full multiplayer version, deploy the server build to a Node host (Vercel, Render, Railway, a VPS).
+
 ## Environment variables
 
 All of them are optional. Copy `.env.example` to `.env.local` to set them.

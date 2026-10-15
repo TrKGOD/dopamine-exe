@@ -1,5 +1,6 @@
 "use client";
 
+import { STATIC_MODE } from "@/client/backend";
 import { motion } from "framer-motion";
 import { useFx } from "@/client/fx";
 import { useGame, useNow } from "@/client/game";
@@ -158,7 +159,7 @@ export default function MissionsPage() {
           </tbody>
         </table>
         <p className="mt-3 text-xs text-muted">
-          All rewards are decided on the server. Replaying requests, refreshing or changing your device clock doesn&apos;t duplicate anything. <RarityTag rarity="mythical" /> items exist, but they&apos;re cosmetic only.
+          {STATIC_MODE ? "This static demo runs the game engine in your browser and saves to localStorage." : "All rewards are decided on the server. Replaying requests, refreshing or changing your device clock doesn't duplicate anything."} <RarityTag rarity="mythical" /> items exist, but they&apos;re cosmetic only.
         </p>
       </section>
     </div>

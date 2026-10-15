@@ -1,5 +1,6 @@
 "use client";
 
+import { STATIC_MODE } from "@/client/backend";
 import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFx } from "@/client/fx";
@@ -393,7 +394,7 @@ export default function DoomclickerPage() {
               <Stat label="Generators" value={c.pendingOffline.generators} color="#a855ff" />
               <Stat label="Earned" value={formatBig(c.pendingOffline.amount)} color="#39ff88" />
             </div>
-            <p className="text-xs text-muted">Offline time is capped at {CLICKER_RULES.offlineCapMs / 3_600_000} hours and calculated by the server clock.</p>
+            <p className="text-xs text-muted">Offline time is capped at {CLICKER_RULES.offlineCapMs / 3_600_000} hours{STATIC_MODE ? "." : " and calculated by the server clock."}</p>
             <button
               className="btn-neon w-full"
               data-autofocus

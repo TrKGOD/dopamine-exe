@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import fsSync from "node:fs";
 import path from "node:path";
-import { createPlayer } from "../game/engine";
+import { createPlayer, normalizePlayer } from "../game/engine";
 import type { PlayerState } from "../game/types";
 import type { Category } from "../game/types";
 
@@ -86,16 +86,6 @@ async function flush() {
       await new Promise((r) => setTimeout(r, 100 * (attempt + 1)));
     }
   }
-}
-
-/** Fill in any fields missing from older saves so new features never crash old players. */
-function normalizePlayer(p: PlayerState): PlayerState {
-  const base = createPlayer(p.id, p.publicId, p.createdAt ?? Date.now());
-  const merged = { ...base, ...p } as PlayerState;
-  for (const key of ["pet", "feed", "roulette", "quests", "stats", "season", "weekly", "events", "clicker"] as const) {
-    (merged as unknown as Record<string, unknown>)[key] = { ...(base[key] as object), ...((p[key] as object) ?? {}) };
-  }
-  return merged;
 }
 
 const normalized = new WeakSet<PlayerState>();

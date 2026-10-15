@@ -5,6 +5,7 @@ import type { Post } from "@/lib/content/posts";
 import type { GameAction } from "@/lib/game/actions";
 import type { ClientState } from "@/lib/game/engine";
 import type { GameEffect } from "@/lib/game/types";
+import { backend } from "./backend";
 import { useFx } from "./fx";
 
 export interface ActionResponse {
@@ -64,9 +65,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const refresh = useCallback(async () => {
     try {
-      const res = await fetch("/api/state", { cache: "no-store" });
-      if (!res.ok) throw new Error(String(res.status));
-      const data = await res.json();
+      const data = await backend.state();
       setState(data.state);
       setCommunity(data.community ?? []);
       setOffset(data.serverNow - Date.now());
@@ -90,17 +89,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
       inflight.current.add(key);
       setPending(new Set(inflight.current));
       try {
-        const res = await fetch("/api/action", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nonce: crypto.randomUUID(), action }),
-        });
-        const data = await res.json().catch(() => ({ ok: false, error: "network", effects: [] }));
+        const data = await backend.act({ nonce: crypto.randomUUID(), action });
         if (data.state) setState(data.state);
         if (data.serverNow) setOffset(data.serverNow - Date.now());
         const effects: GameEffect[] = data.effects ?? [];
         if (!data.ok) {
-          if (!opts?.silent && !SILENT_ERRORS.has(data.error)) fx.toast(errorMessage(data.error), "bad");
+          if (!opts?.silent && !SILENT_ERRORS.has(data.error ?? "")) fx.toast(errorMessage(data.error), "bad");
           return { ok: false, error: data.error, effects };
         }
         if (opts?.defer) return { ok: true, effects, deferred: effects };

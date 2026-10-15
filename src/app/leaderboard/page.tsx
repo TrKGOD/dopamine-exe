@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { backend, STATIC_MODE } from "@/client/backend";
 import { useFx } from "@/client/fx";
 import { useGame } from "@/client/game";
 import { PetAvatar } from "@/components/PetAvatar";
@@ -10,7 +11,7 @@ import { ShareCardButton } from "@/components/ShareCardButton";
 import { Bar, EmptyState, Modal, SectionTitle } from "@/components/ui";
 import { PERSONALITY_META } from "@/lib/game/config";
 import { ITEMS, ITEM_LIST } from "@/lib/game/items";
-import type { PublicProfile } from "@/lib/server/profiles";
+import type { PublicProfile } from "@/lib/content/profiles";
 
 interface Board {
   entries: PublicProfile[];
@@ -30,9 +31,7 @@ export default function LeaderboardPage() {
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch("/api/leaderboard", { cache: "no-store" });
-      if (!res.ok) throw new Error();
-      setBoard(await res.json());
+      setBoard(await backend.leaderboard());
       setError(false);
     } catch {
       setError(true);
@@ -118,6 +117,7 @@ export default function LeaderboardPage() {
               })}
             </ol>
           )}
+          {STATIC_MODE && <p className="mt-3 text-xs text-acid">Static demo build: you are ranked against fictional DEMO players only. Run the server version for a shared leaderboard.</p>}
           <p className="mt-3 text-xs text-muted">Entries marked DEMO are fictional seed players. Only display names, levels and cosmetics are public — never account data.</p>
         </section>
 
@@ -172,7 +172,7 @@ export default function LeaderboardPage() {
                 svg: petRef.current?.querySelector("svg") ?? null,
               })}
             />
-            <Link href={`/u/${state.publicId}`} className="btn-ghost">
+            <Link href={STATIC_MODE ? "/u/me" : `/u/${state.publicId}`} className="btn-ghost">
               🔗 View public page
             </Link>
           </div>
